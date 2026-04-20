@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block hero %}
+<section class="hero compact">
+    <div class="hero-copy">
+        <p class="eyebrow">Page not found</p>
+        <h1>Opportunity not found</h1>
+        <p class="hero-text">The requested resource does not exist or may have been removed. The updated layout keeps even error states calm, clear, and easy to recover from.</p>
+        <div class="hero-actions">
+            <a class="button" href="{{ url_for('index') }}">Return to the opportunity list</a>
+        </div>
+    </div>
+    <aside class="hero-panel">
+        <div>
+            <p class="eyebrow">Quick recovery</p>
+            <ul class="feature-list">
+                <li>Go back to the main opportunity board.</li>
+                <li>Create a fresh role if you were looking for an empty state.</li>
+                <li>Keep the user moving instead of leaving them stuck.</li>
+            </ul>
+        </div>
+    </aside>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="card not-found-card stack" style="--delay: 0;">
+    <div>
+        <p class="eyebrow">404</p>
+        <h2>Opportunity not found</h2>
+        <p class="section-copy">The requested resource does not exist or may have been removed.</p>
+    </div>
+    <div class="action-row">
+        <a class="button" href="{{ url_for('index') }}">Return to the opportunity list</a>
+        <a class="button ghost" href="{{ url_for('create_opportunity') }}">Post a new role</a>
+    </div>
+</section>
+{% endblock %}

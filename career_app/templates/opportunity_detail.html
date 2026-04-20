@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block hero %}
+<section class="hero compact">
+    <div class="hero-copy">
+        <p class="eyebrow">{{ opportunity.company }} is hiring</p>
+        <h1>{{ opportunity.title }}</h1>
+        <p class="hero-text">{{ opportunity.description }}</p>
+        <div class="chip-row">
+            <span class="chip">{{ opportunity.location }}</span>
+            <span class="chip">Closes {{ opportunity.closing_date }}</span>
+            <span class="chip">{{ opportunity.application_count }} applicants tracked</span>
+        </div>
+    </div>
+    <aside class="hero-panel">
+        <div>
+            <p class="eyebrow">Quick snapshot</p>
+            <p class="section-copy">This page now separates role details from the application form more clearly, making the workflow easier to scan and use.</p>
+        </div>
+        <div class="stat-grid">
+            <article class="stat-box">
+                <span class="stat-value">{{ opportunity.application_count }}</span>
+                <p class="stat-label">Applications received</p>
+            </article>
+            <article class="stat-box">
+                <span class="stat-value">1</span>
+                <p class="stat-label">Role currently open</p>
+            </article>
+        </div>
+    </aside>
+</section>
+{% endblock %}
+
+{% block content %}
+{% if created %}
+<p class="banner">Opportunity created successfully.</p>
+{% endif %}
+{% if applied %}
+<p class="banner">Application submitted successfully.</p>
+{% endif %}
+
+<section class="detail-layout">
+    <article class="card detail-panel stack" style="--delay: 0;">
+        <div class="detail-head">
+            <div>
+                <p class="eyebrow">Role overview</p>
+                <h2>{{ opportunity.title }}</h2>
+                <p class="meta">{{ opportunity.company }} | {{ opportunity.location }}</p>
+            </div>
+            <span class="chip">Hiring now</span>
+        </div>
+
+        <div class="detail-metrics">
+            <div class="metric-box">
+                <span class="metric-label">Closing date</span>
+                <span class="metric-value">{{ opportunity.closing_date }}</span>
+            </div>
+            <div class="metric-box">
+                <span class="metric-label">Applications received</span>
+                <span class="metric-value">{{ opportunity.application_count }}</span>
+            </div>
+            <div class="metric-box">
+                <span class="metric-label">Workflow</span>
+                <span class="metric-value">Web and API ready</span>
+            </div>
+        </div>
+
+        <div class="detail-sections">
+            <div class="stack">
+                <div>
+                    <p class="eyebrow">Description</p>
+                    <p class="body-copy">{{ opportunity.description }}</p>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="stack">
+                <div class="section-header">
+                    <div>
+                        <p class="eyebrow">Applicants</p>
+                        <h3>Submitted applications</h3>
+                    </div>
+                    <span class="section-tag">{{ opportunity.application_count }} received</span>
+                </div>
+
+                <div class="list-stack">
+                    {% for application in opportunity.applications %}
+                    <article class="card application-card stack" style="--delay: {{ loop.index }};">
+                        <div class="application-head">
+                            <div>
+                                <h3>{{ application.applicant_name }}</h3>
+                                <p class="meta">{{ application.applicant_email }}</p>
+                            </div>
+                            <span class="status-pill">{{ application.status }}</span>
+                        </div>
+                        <p class="body-copy">{{ application.cover_letter }}</p>
+                        <div class="inline-actions">
+                            <a class="button secondary small" href="{{ application.resume_url }}" target="_blank" rel="noreferrer">Open resume link</a>
+                        </div>
+                    </article>
+                    {% else %}
+                    <article class="card empty-state stack">
+                        <p class="eyebrow">Waiting for the first applicant</p>
+                        <h3>No applicants yet.</h3>
+                        <p class="section-copy">The improved layout keeps this state from feeling empty while still making the next action obvious.</p>
+                    </article>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </article>
+
+    <section class="card form-card sticky-card stack" style="--delay: 1;">
+        <div>
+            <p class="eyebrow">Application form</p>
+            <h2>Apply for this role</h2>
+            <p class="section-copy">The form is now visually separated and easier to complete, with stronger labels, focus states, and action buttons.</p>
+        </div>
+
+        <form method="post" action="{{ url_for('apply_to_opportunity', opportunity_id=opportunity.id) }}">
+            <label class="field">
+                <span class="field-label">Name</span>
+                <span class="field-copy">Introduce yourself the same way you would like to appear in the applicant list.</span>
+                <input name="applicant_name" value="{{ form_data.applicant_name }}" placeholder="Margaret Hamilton">
+                {% if errors.applicant_name %}<span class="error">{{ errors.applicant_name }}</span>{% endif %}
+            </label>
+            <label class="field">
+                <span class="field-label">Email</span>
+                <span class="field-copy">Use a contact address that can receive follow-up communication.</span>
+                <input name="applicant_email" value="{{ form_data.applicant_email }}" placeholder="applicant@example.com">
+                {% if errors.applicant_email %}<span class="error">{{ errors.applicant_email }}</span>{% endif %}
+            </label>
+            <label class="field">
+                <span class="field-label">Resume URL</span>
+                <span class="field-copy">Paste a direct link that opens your CV or portfolio.</span>
+                <input name="resume_url" value="{{ form_data.resume_url }}" placeholder="https://example.com/resume.pdf">
+                {% if errors.resume_url %}<span class="error">{{ errors.resume_url }}</span>{% endif %}
+            </label>
+            <label class="field">
+                <span class="field-label">Cover letter</span>
+                <span class="field-copy">Highlight why your experience fits this opportunity.</span>
+                <textarea name="cover_letter" placeholder="Share your experience, motivation, and how you would contribute.">{{ form_data.cover_letter }}</textarea>
+                {% if errors.cover_letter %}<span class="error">{{ errors.cover_letter }}</span>{% endif %}
+            </label>
+            <div class="action-row">
+                <button type="submit">Submit application</button>
+                <a class="button ghost" href="{{ url_for('index') }}">Back to all roles</a>
+            </div>
+        </form>
+    </section>
+</section>
+{% endblock %}

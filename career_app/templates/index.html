@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block hero %}
+<section class="hero">
+    <div class="hero-copy">
+        <p class="eyebrow">Open roles, stronger impressions</p>
+        <h1>Make every opportunity feel worth applying for.</h1>
+        <p class="hero-text">Browse published roles in a calmer, more confident layout with clearer calls to action for both recruiters and applicants.</p>
+        <div class="hero-actions">
+            <a class="button" href="{{ url_for('create_opportunity') }}">Post a new role</a>
+            <a class="button secondary" href="#opportunity-grid">Explore opportunities</a>
+        </div>
+        <p class="hero-note">Every screen is now tuned for better hierarchy, more inviting motion, and a stronger first impression.</p>
+    </div>
+    <aside class="hero-panel">
+        <div>
+            <p class="eyebrow">Dashboard snapshot</p>
+            <p class="section-copy">A more expressive interface helps users orient faster and makes the project easier to present during demos.</p>
+        </div>
+        <div class="stat-grid">
+            <article class="stat-box">
+                <span class="stat-value">{{ opportunities|length }}</span>
+                <p class="stat-label">Live opportunities</p>
+            </article>
+            <article class="stat-box">
+                <span class="stat-value">6</span>
+                <p class="stat-label">API routes ready</p>
+            </article>
+        </div>
+        <div class="mini-grid">
+            <article class="mini-card">
+                <p>Responsive cards, stronger links, and animated sections make the app feel complete instead of purely academic.</p>
+            </article>
+        </div>
+    </aside>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="section-header">
+    <div>
+        <p class="eyebrow">Opportunity board</p>
+        <h2 class="section-title">Current openings</h2>
+        <p class="section-copy">Each role card now surfaces the essentials right away, with cleaner actions and more visual contrast between content areas.</p>
+    </div>
+    <span class="section-tag">{{ opportunities|length }} roles published</span>
+</section>
+
+<section id="opportunity-grid" class="grid two">
+    {% for opportunity in opportunities %}
+    <article class="card opportunity-card stack" style="--delay: {{ loop.index0 }};">
+        <div class="card-top">
+            <div class="stack">
+                <p class="eyebrow">Opportunity {{ loop.index }}</p>
+                <div>
+                    <h2>{{ opportunity.title }}</h2>
+                    <p class="meta">{{ opportunity.company }}</p>
+                </div>
+            </div>
+            <span class="chip">{{ opportunity.location }}</span>
+        </div>
+        <p class="body-copy">{{ opportunity.description }}</p>
+        <div class="metric-row">
+            <div class="metric-box">
+                <span class="metric-label">Closing date</span>
+                <span class="metric-value">{{ opportunity.closing_date }}</span>
+            </div>
+            <div class="metric-box">
+                <span class="metric-label">Applications</span>
+                <span class="metric-value">{{ opportunity.application_count }}</span>
+            </div>
+        </div>
+        <div class="inline-actions">
+            <a class="button secondary small" href="{{ url_for('opportunity_detail', opportunity_id=opportunity.id) }}">View details and apply</a>
+        </div>
+    </article>
+    {% else %}
+    <article class="card empty-state stack">
+        <p class="eyebrow">Ready to launch</p>
+        <h2>No opportunities posted yet</h2>
+        <p class="section-copy">Start by creating the first career opportunity for applicants to discover. The improved layout will make that first post look much more inviting.</p>
+        <div class="action-row">
+            <a class="button" href="{{ url_for('create_opportunity') }}">Create the first opening</a>
+        </div>
+    </article>
+    {% endfor %}
+</section>
+{% endblock %}

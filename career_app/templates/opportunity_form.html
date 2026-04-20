@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block hero %}
+<section class="hero compact">
+    <div class="hero-copy">
+        <p class="eyebrow">Recruiter workspace</p>
+        <h1>Create Opportunity</h1>
+        <p class="hero-text">Build a role page that feels clear, credible, and easy to act on. Stronger layout and better spacing help the information land immediately.</p>
+        <div class="hero-actions">
+            <a class="button secondary" href="{{ url_for('index') }}">Return to opportunity list</a>
+        </div>
+    </div>
+    <aside class="hero-panel">
+        <div>
+            <p class="eyebrow">Posting checklist</p>
+            <ul class="feature-list">
+                <li>Use a specific title and location so applicants can self-select faster.</li>
+                <li>Describe the work in plain language and keep the role outcome-focused.</li>
+                <li>Set a clear closing date to create urgency and structure.</li>
+            </ul>
+        </div>
+    </aside>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="split-layout">
+    <aside class="card stack" style="--delay: 0;">
+        <div>
+            <p class="eyebrow">Design notes</p>
+            <h2>What makes this page feel better</h2>
+        </div>
+        <div class="tip-grid">
+            <article class="tip-card">
+                <h3>Clear hierarchy</h3>
+                <p>Field labels, helper text, and action buttons now read as one system instead of unrelated pieces.</p>
+            </article>
+            <article class="tip-card">
+                <h3>Gentle motion</h3>
+                <p>Entry transitions and hover states make the page feel alive without becoming distracting.</p>
+            </article>
+            <article class="tip-card">
+                <h3>Better confidence</h3>
+                <p>Stronger buttons and cleaner spacing help users trust that the form is complete and ready to use.</p>
+            </article>
+        </div>
+    </aside>
+
+    <section class="card form-card" style="--delay: 1;">
+        <div class="stack">
+            <div>
+                <p class="eyebrow">Opportunity form</p>
+                <h2>Publish a polished opening</h2>
+                <p class="section-copy">The form keeps the original workflow intact while improving readability, focus states, and visual rhythm.</p>
+            </div>
+
+            <form method="post">
+                <label class="field">
+                    <span class="field-label">Title</span>
+                    <span class="field-copy">Name the role clearly so applicants know what they are opening.</span>
+                    <input name="title" value="{{ form_data.title }}" placeholder="Senior QA Engineer">
+                    {% if errors.title %}<span class="error">{{ errors.title }}</span>{% endif %}
+                </label>
+                <label class="field">
+                    <span class="field-label">Company</span>
+                    <span class="field-copy">Show the organization behind the opportunity.</span>
+                    <input name="company" value="{{ form_data.company }}" placeholder="Pulse Labs">
+                    {% if errors.company %}<span class="error">{{ errors.company }}</span>{% endif %}
+                </label>
+                <label class="field">
+                    <span class="field-label">Location</span>
+                    <span class="field-copy">Mention whether the job is remote, hybrid, or on-site.</span>
+                    <input name="location" value="{{ form_data.location }}" placeholder="Remote">
+                    {% if errors.location %}<span class="error">{{ errors.location }}</span>{% endif %}
+                </label>
+                <label class="field">
+                    <span class="field-label">Closing date</span>
+                    <span class="field-copy">Set a clear deadline to frame the application window.</span>
+                    <input name="closing_date" type="date" value="{{ form_data.closing_date }}">
+                    {% if errors.closing_date %}<span class="error">{{ errors.closing_date }}</span>{% endif %}
+                </label>
+                <label class="field">
+                    <span class="field-label">Description</span>
+                    <span class="field-copy">Summarize the work, expectations, and value of the role in a concise paragraph.</span>
+                    <textarea name="description" placeholder="Describe the role, impact, and day-to-day responsibilities.">{{ form_data.description }}</textarea>
+                    {% if errors.description %}<span class="error">{{ errors.description }}</span>{% endif %}
+                </label>
+                <div class="action-row">
+                    <button type="submit">Publish opportunity</button>
+                    <a class="button ghost" href="{{ url_for('index') }}">Cancel and go back</a>
+                </div>
+            </form>
+        </div>
+    </section>
+</section>
+{% endblock %}
